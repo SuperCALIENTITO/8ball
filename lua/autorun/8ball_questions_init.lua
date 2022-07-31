@@ -62,8 +62,10 @@ hook.Add("PlayerSay", "8BALL_hook", function(ply, text)
         local answer = table.Random(eightBall.answers.type)
         local answer_phrase = eightBall_GetLanguage(answer)
         print(eightBall.prefix .. " " .. ply:Nick() .. " asked the 8ball: " .. string.sub(text, 8, -1))
-        for k, v in pairs(player.GetAll()) do
-            v:ChatPrint(eightBall.prefix .. " " .. answer_phrase)
-        end
+        timer.Simple(0.1, function()
+            for _, v in pairs(player.GetAll()) do
+                v:ChatPrint(eightBall.prefix .. " " .. ply:Nick()  .. " " .. answer_phrase)
+            end
+        end)
     end
 end)
