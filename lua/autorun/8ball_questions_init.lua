@@ -27,13 +27,13 @@ eightBall.answers["english"] = {
 }
 
 eightBall.answers["spanish"] = {
-    ["never"] = "No lo creo",
-    ["rarely"] = "No tanto",
-    ["sometimes"] = "Puede ser",
-    ["often"] = "Lo mas probable que si",
-    ["normally"] = "Igual puede que si",
+    ["never"] = "Lo veo imposible",
+    ["rarely"] = "Osea puede que si, pero sigue siendo no",
+    ["sometimes"] = "Es probable, quien sabe...",
+    ["often"] = "Es probable... probable...",
+    ["normally"] = "Lo mas probable que si",
     ["usually"] = "Es muy probable que si",
-    ["always"] = "por supuesto",
+    ["always"] = "Obvio que si",
 }
 
 ----------------------------------
@@ -50,17 +50,18 @@ local lang_table = {
     ["es"] = "spanish"
 }
 
-function 8ball_GetLanguage(phrase)
-    local language = lang_table[lang:GetString()] or "english"
+function eightBall_GetLanguage(phrase)
+    local lang = GetConVar("8ball_lang"):GetString()
+    local language = lang_table[lang] or "english"
     return eightBall.answers[language][phrase] or phrase
 end
 
 
 hook.Add("PlayerSay", "8BALL_hook", function(ply, text)
-    if ( string.sub(text, 1, 8) == "!8ball " ) and string.sub(text, -1) == "?" then
+    if string.StartWith(text, "!8ball ") and string.EndsWith(text, "?") then
         local answer = table.Random(eightBall.answers.type)
-        local answer_phrase = 8ball_GetLanguage(answer)
-        print(eightBall.prefix .. " " .. ply:Nick() .. " asked the 8ball: " .. string.sub(text, 9, -1))
+        local answer_phrase = eightBall_GetLanguage(answer)
+        print(eightBall.prefix .. " " .. ply:Nick() .. " asked the 8ball: " .. string.sub(text, 8, -1))
         for k, v in pairs(player.GetAll()) do
             v:ChatPrint(eightBall.prefix .. " " .. answer_phrase)
         end
