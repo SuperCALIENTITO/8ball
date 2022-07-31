@@ -1,7 +1,7 @@
-8b = {}
-8b.prefix = "[8BALL]"
-8b.answers = {}
-8b.answers.type = {
+eightBall = {}
+eightBall.prefix = "[8BALL]"
+eightBall.answers = {}
+eightBall.answers.type = {
     "never",
     "rarely",
     "sometimes",
@@ -16,7 +16,7 @@
 ---------- Translations ----------
 ----------------------------------
 
-8b.answers["english"] = {
+eightBall.answers["english"] = {
     ["never"] = "Nah i dont think so...",
     ["rarely"] = "Mmmm maybe, but no",
     ["sometimes"] = "Probably... no",
@@ -26,7 +26,7 @@
     ["always"] = "Hell yeah",
 }
 
-8b.answers["spanish"] = {
+eightBall.answers["spanish"] = {
     ["never"] = "No lo creo",
     ["rarely"] = "No tanto",
     ["sometimes"] = "Puede ser",
@@ -52,16 +52,17 @@ local lang_table = {
 
 function 8ball_GetLanguage(phrase)
     local language = lang_table[lang:GetString()] or "english"
-    return 8b.answers[language][phrase] or phrase
+    return eightBall.answers[language][phrase] or phrase
 end
 
 
 hook.Add("PlayerSay", "8BALL_hook", function(ply, text)
-    if ( string.sub(text, 1, 8) == "!8ball " or string.sub(text, 1, 3) == "!8b" ) and string.sub(text, -1) == "?" then
-        local answer = table.Random(8b.answers.type)
+    if ( string.sub(text, 1, 8) == "!8ball " ) and string.sub(text, -1) == "?" then
+        local answer = table.Random(eightBall.answers.type)
         local answer_phrase = 8ball_GetLanguage(answer)
+        print(eightBall.prefix .. " " .. ply:Nick() .. " asked the 8ball: " .. string.sub(text, 9, -1))
         for k, v in pairs(player.GetAll()) do
-            v:ChatPrint(answer)
+            v:ChatPrint(eightBall.prefix .. " " .. answer_phrase)
         end
     end
 end)
