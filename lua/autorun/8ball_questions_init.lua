@@ -1,3 +1,6 @@
+----------------------------------
+-------------- Core --------------
+----------------------------------
 eightBall = {}
 eightBall.prefix = "[8BALL]"
 eightBall.answers = {}
@@ -10,7 +13,12 @@ eightBall.answers.type = {
     "usually",
     "always"
 }
-
+----------------------------------
+------------ Extension -----------
+----------------------------------
+eightBall.gdr_enabled = false
+eightBall.gdr_picture = "https://i.imgur.com/51C6Vfj.png"
+eightBall.gdr_name = "8Ball"
 
 ----------------------------------
 ---------- Translations ----------
@@ -63,9 +71,19 @@ hook.Add("PlayerSay", "8BALL_hook", function(ply, text)
         local answer_phrase = eightBall_GetLanguage(answer)
         print(eightBall.prefix .. " " .. ply:Nick() .. " asked the 8ball: " .. string.sub(text, 8, -1))
         timer.Simple(0.1, function()
+
+            -- GDR
+            if tGDRConfig and eightBall.gdr_enabled then
+                hook.Call("GDR_sendMessage", nil, 
+                eightBall.gdr_picture,
+                eightBall.gdr_name,
+                ply:Nick()  .. ", " .. answer_phrase)
+            end
+
             for _, v in pairs(player.GetAll()) do
                 v:ChatPrint(eightBall.prefix .. " " .. ply:Nick()  .. " " .. answer_phrase)
             end
+
         end)
     end
 end)
